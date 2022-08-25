@@ -41,11 +41,18 @@ router.put("/update", async (req, res) => {
         let found = await User.findOne({ username }); // first db call
         if (!found) throw "No user exists";
 
+        /** 
+         * Another way to update a username, makes only 1 call to db
+        let updatedUser = await User.updateOne({ username }, { username: newUsername });
+        if (updated.matchedCount != 1) {
+            throw 'username not found';
+        }
+        */
         found.username = newUsername; // making change in memory
         await found.save(); // second db call
-        
 
-        res.status(200).json({ message: `Updated ${username} to ${found.username}` });
+
+        res.status(200).json({ message: `Updated ${username} to ${newUsername}` });
 
     } catch (eMessage) {
         res.status(400).json({ error: eMessage.toString() })
@@ -64,7 +71,7 @@ router.delete("/delete", async (req, res) => {
         res.status(200).json({ message: `Deleted ${username}` });
 
     } catch (eMessage) {
-        res.status(400).json({ error: eMessage })
+        res.status(400).json({ error: eMessage.toString() })
     }
 
 })
@@ -88,7 +95,7 @@ router.delete("/delete", async (req, res) => {
 //         let found = await User.find({ username }); first call to the db
 //         if (found.length == 0) throw "No user exists";
 
-        
+
 //         // second, and third call to the db
 //         await User.updateOne({ username: username }, { username: newUsername });
 
