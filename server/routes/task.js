@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const { UserSchema } = require("../schemas.js")
 const router = express.Router();
+const { generateRandomString } = require("../utils")
 
 const User = mongoose.model('User', UserSchema, "Users");
 
@@ -20,6 +21,9 @@ router.post("/create", async (req, res) => {
         if (!foundUser) throw "Username does not exist";
         if (!task) throw "Please add a task";
 
+        // to generate task id
+        const taskId = generateRandomString(8);
+        console.log(taskId);
         // insert into db
         // need to figure out how to add something to db
         if (foundUser.tasks.includes(task)) {
@@ -39,6 +43,9 @@ router.post("/create", async (req, res) => {
     }
 
 })
+
+
+
 
 
 module.exports = router
