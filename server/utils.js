@@ -1,7 +1,7 @@
 module.exports = {
     generateRandomString,
 }
-// TODO ask about function*
+
 function* generateRandomString(len=8) {
     while (true) {
         let result = ""
