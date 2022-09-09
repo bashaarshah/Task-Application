@@ -102,6 +102,32 @@ router.put("/update", async (req, res) => {
 
 })
 
+router.delete("/delete", async (req, res) => {
+
+    // pass username as a req query parameter
+    var username = req.query.username;
+    var taskid = req.query.taskid;
+    try {
+        // check to see if username is valid
+        if (!username) throw "Please provide a username";
+        if (!taskid) throw "Please provide a taskid";
+
+        const foundUser = await User.findOne({ username });
+        if (!foundUser) throw "Username does not exist";
+
+
+        let updated = await User.updateOne(
+            { username, "tasks._id": new ObjectId(taskid) },
+            { $pull: { "tasks.$.task": taskid } })
+
+        res.status(200).json({ message: `Deleted task: ${taskid}` })
+    } catch (eMessage) {
+        console.log(eMessage);
+        res.status(400).json({ error: eMessage.toString() });
+    }
+
+})
+
 
 
 
