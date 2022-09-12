@@ -118,7 +118,13 @@ router.delete("/delete", async (req, res) => {
 
         let updated = await User.updateOne(
             { username, "tasks._id": new ObjectId(taskid) },
-            { $pull: { "tasks.$.task": taskid } })
+            { $pull: { "tasks": { _id: new ObjectId(taskid) } } })
+        
+            if (updated.modifiedCount == 0) {
+                res.status(304).json({ error: 'Task not removed' }).end();
+                return;
+            }
+    
 
         res.status(200).json({ message: `Deleted task: ${taskid}` })
     } catch (eMessage) {

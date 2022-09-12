@@ -27,6 +27,16 @@ router.post("/create", async (req, res) => {
 
 })
 
+router.get("/all", async (req, res) => {
+    try {
+        const found = await User.find({});
+        res.status(200).json(found);
+    } catch (eMessage) {
+        res.status(400).json({ error: eMessage });
+    }
+
+})
+
 router.put("/update", async (req, res) => {
 
     var username = req.query.username;
